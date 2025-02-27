@@ -1,5 +1,9 @@
 package com.gildedtros;
 
+import com.gildedtros.products.Product;
+
+import java.util.Arrays;
+
 class GildedTros {
     Item[] items;
 
@@ -8,57 +12,49 @@ class GildedTros {
     }
 
     public void updateQuality() {
-        for (int i = 0; i < items.length; i++) {
-            if (!items[i].name.equals("Good Wine")
-                    && !items[i].name.equals("Backstage passes for Re:Factor")
-                    && !items[i].name.equals("Backstage passes for HAXX"))
-            {
-                if (items[i].quality > 0) {
-                    if (!items[i].name.equals("B-DAWG Keychain")) {
-                        items[i].quality = items[i].quality - 1;
-                    }
-                }
-            } else {
-                if (items[i].quality < 50) {
-                    items[i].quality = items[i].quality + 1;
+        items = Arrays.stream(items)
+                .map(item -> new Product(item.name, item.sellIn, item.quality))
+                .map(this::updateQualityOfProduct)
+                .map(product -> new Item(product.getName(), product.getSellIn(), product.getQuality()))
+                .toArray(Item[]::new);
+    }
 
-                    if (items[i].name.equals("Backstage passes for Re:Factor") || items[i].name.equals("Backstage passes for HAXX") ) {
-                        if (items[i].sellIn < 11) {
-                            if (items[i].quality < 50) {
-                                items[i].quality = items[i].quality + 1;
-                            }
-                        }
-
-                        if (items[i].sellIn < 6) {
-                            if (items[i].quality < 50) {
-                                items[i].quality = items[i].quality + 1;
-                            }
-                        }
-                    }
-                }
+    private Product updateQualityOfProduct(Product product) {
+        if (!product.getName().equals("Good Wine") && !product.getName().equals("Backstage passes for Re:Factor") && !product.getName().equals("Backstage passes for HAXX")) {
+            if (!product.getName().equals("B-DAWG Keychain")) {
+                product.decreaseQuality(1);
             }
+        } else {
+            product.increaseQuality(1);
 
-            if (!items[i].name.equals("B-DAWG Keychain")) {
-                items[i].sellIn = items[i].sellIn - 1;
-            }
+            if (product.getName().equals("Backstage passes for Re:Factor") || product.getName().equals("Backstage passes for HAXX")) {
+                if (product.getSellIn() < 11) {
+                    product.increaseQuality(1);
+                }
 
-            if (items[i].sellIn < 0) {
-                if (!items[i].name.equals("Good Wine")) {
-                    if (!items[i].name.equals("Backstage passes for Re:Factor") && !items[i].name.equals("Backstage passes for HAXX")) {
-                        if (items[i].quality > 0) {
-                            if (!items[i].name.equals("B-DAWG Keychain")) {
-                                items[i].quality = items[i].quality - 1;
-                            }
-                        }
-                    } else {
-                        items[i].quality = items[i].quality - items[i].quality;
-                    }
-                } else {
-                    if (items[i].quality < 50) {
-                        items[i].quality = items[i].quality + 1;
-                    }
+                if (product.getSellIn() < 6) {
+                    product.increaseQuality(1);
                 }
             }
         }
+
+        if (!product.getName().equals("B-DAWG Keychain")) {
+            product.decreaseSellIn();
+        }
+
+        if (product.getSellIn() < 0) {
+            if (!product.getName().equals("Good Wine")) {
+                if (!product.getName().equals("Backstage passes for Re:Factor") && !product.getName().equals("Backstage passes for HAXX")) {
+                    if (!product.getName().equals("B-DAWG Keychain")) {
+                        product.decreaseQuality(1);
+                    }
+                } else {
+                    product.setQuality(0);
+                }
+            } else {
+                product.increaseQuality(1);
+            }
+        }
+        return product;
     }
 }
