@@ -1,6 +1,7 @@
 package com.gildedtros.products.strategies;
 
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -9,9 +10,10 @@ class RegularAppreciationQualityUpdatingStrategyTest extends QualityUpdatingStra
 
     private final RegularAppreciationQualityUpdatingStrategy regularAppreciationQualityUpdatingStrategy = new RegularAppreciationQualityUpdatingStrategy();
 
-    @Test
-    void shouldIncreaseQualityByOneWhenSellInPositive() {
-        when(product.getSellIn()).thenReturn(10);
+    @ParameterizedTest
+    @ValueSource(ints = {1, 4})
+    void shouldIncreaseQualityByOneWhenSellInPositive(int sellIn) {
+        when(product.getSellIn()).thenReturn(sellIn);
 
         regularAppreciationQualityUpdatingStrategy.updateQuality(product);
 
@@ -19,9 +21,10 @@ class RegularAppreciationQualityUpdatingStrategyTest extends QualityUpdatingStra
         verify(product).decreaseSellIn();
     }
 
-    @Test
-    void shouldIncreaseQualityByTwoWhenSellInZeroOrNegative() {
-        when(product.getSellIn()).thenReturn(0);
+    @ParameterizedTest
+    @ValueSource(ints = {0, -4})
+    void shouldIncreaseQualityByTwoWhenSellInZeroOrNegative(int sellIn) {
+        when(product.getSellIn()).thenReturn(sellIn);
 
         regularAppreciationQualityUpdatingStrategy.updateQuality(product);
 

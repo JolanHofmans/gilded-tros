@@ -1,6 +1,7 @@
 package com.gildedtros.products.strategies;
 
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -9,9 +10,10 @@ class EventPeakQualityUpdatingStrategyTest extends QualityUpdatingStrategyTest {
 
     private final EventPeakQualityUpdatingStrategy eventPeakQualityUpdatingStrategy = new EventPeakQualityUpdatingStrategy();
 
-    @Test
-    void shouldHaveQualityZeroWhenSellInZeroOrNegative() {
-        when(product.getSellIn()).thenReturn(0);
+    @ParameterizedTest
+    @ValueSource(ints = {0, -4})
+    void shouldHaveQualityZeroWhenSellInZeroOrNegative(int sellIn) {
+        when(product.getSellIn()).thenReturn(sellIn);
 
         eventPeakQualityUpdatingStrategy.updateQuality(product);
 
@@ -19,9 +21,10 @@ class EventPeakQualityUpdatingStrategyTest extends QualityUpdatingStrategyTest {
         verify(product).decreaseSellIn();
     }
 
-    @Test
-    void shouldIncreaseQualityByOneWhenSellInGreaterThanTen() {
-        when(product.getSellIn()).thenReturn(11);
+    @ParameterizedTest
+    @ValueSource(ints = {11, 15})
+    void shouldIncreaseQualityByOneWhenSellInGreaterThanTen(int sellIn) {
+        when(product.getSellIn()).thenReturn(sellIn);
 
         eventPeakQualityUpdatingStrategy.updateQuality(product);
 
@@ -29,9 +32,10 @@ class EventPeakQualityUpdatingStrategyTest extends QualityUpdatingStrategyTest {
         verify(product).decreaseSellIn();
     }
 
-    @Test
-    void shouldIncreaseQualityByTwoWhenSellInGreaterThanFive() {
-        when(product.getSellIn()).thenReturn(7);
+    @ParameterizedTest
+    @ValueSource(ints = {10, 6})
+    void shouldIncreaseQualityByTwoWhenSellInGreaterThanFive(int sellIn) {
+        when(product.getSellIn()).thenReturn(sellIn);
 
         eventPeakQualityUpdatingStrategy.updateQuality(product);
 
@@ -39,9 +43,10 @@ class EventPeakQualityUpdatingStrategyTest extends QualityUpdatingStrategyTest {
         verify(product).decreaseSellIn();
     }
 
-    @Test
-    void shouldIncreaseQualityByThreeWhenSellInGreaterThanZero() {
-        when(product.getSellIn()).thenReturn(3);
+    @ParameterizedTest
+    @ValueSource(ints = {1, 5})
+    void shouldIncreaseQualityByThreeWhenSellInGreaterThanZero(int sellIn) {
+        when(product.getSellIn()).thenReturn(sellIn);
 
         eventPeakQualityUpdatingStrategy.updateQuality(product);
 
