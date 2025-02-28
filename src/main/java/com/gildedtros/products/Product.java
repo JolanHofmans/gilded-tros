@@ -1,19 +1,24 @@
 package com.gildedtros.products;
 
-import java.util.Objects;
+import com.gildedtros.products.strategies.QualityUpdatingStrategy;
 
 public class Product {
     private final String name;
     private int sellIn;
     private int quality;
+    private final QualityUpdatingStrategy qualityUpdatingStrategy;
 
-    public Product(String name, int sellIn, int quality) {
+    public Product(String name, int sellIn, int quality, QualityUpdatingStrategy qualityUpdatingStrategy) {
         if (quality < 0 || quality > 50) {
             throw new IllegalArgumentException("Quality must be between 0 and 50");
+        }
+        if(qualityUpdatingStrategy == null) {
+            throw new IllegalArgumentException("QualityUpdatingStrategy must not be null");
         }
         this.name = name;
         this.sellIn = sellIn;
         this.quality = quality;
+        this.qualityUpdatingStrategy = qualityUpdatingStrategy;
     }
 
     public String getName() {
@@ -44,27 +49,11 @@ public class Product {
         return quality;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == this) return true;
-        if (obj == null || obj.getClass() != this.getClass()) return false;
-        var that = (Product) obj;
-        return Objects.equals(this.name, that.name) &&
-                this.sellIn == that.sellIn &&
-                this.quality == that.quality;
+    public QualityUpdatingStrategy getQualityUpdatingStrategy() {
+        return qualityUpdatingStrategy;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(name, sellIn, quality);
+    public void updateQuality() {
+        qualityUpdatingStrategy.updateQuality(this);
     }
-
-    @Override
-    public String toString() {
-        return "Product[" +
-                "name=" + name + ", " +
-                "sellIn=" + sellIn + ", " +
-                "quality=" + quality + ']';
-    }
-
 }
