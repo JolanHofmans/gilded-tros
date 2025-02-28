@@ -141,6 +141,33 @@ class GildedTrosTest {
     }
 
     @ParameterizedTest
+    @ValueSource(strings = {"Duplicate Code", "Long Methods", "Ugly Variable Names"})
+    void smellyItemShouldDecreaseByTwoInQualityByOneEachDay(String name) {
+        Item[] items = new Item[]{new Item(name, 1, 10)};
+        GildedTros app = new GildedTros(items);
+
+        app.updateQuality();
+
+        assertThat(app.items[0].quality).isEqualTo(8);
+        assertThat(app.items[0].sellIn).isZero();
+
+        app.updateQuality();
+
+        assertThat(app.items[0].quality).isEqualTo(4);
+        assertThat(app.items[0].sellIn).isEqualTo(-1);
+
+        app.updateQuality();
+
+        assertThat(app.items[0].quality).isZero();
+        assertThat(app.items[0].sellIn).isEqualTo(-2);
+
+        app.updateQuality();
+
+        assertThat(app.items[0].quality).isZero();
+        assertThat(app.items[0].sellIn).isEqualTo(-3);
+    }
+
+    @ParameterizedTest
     @CsvSource({
             "Backstage passes for Re:Factor, 5, 48",
             "Backstage passes for Re:Factor, 10, 49",

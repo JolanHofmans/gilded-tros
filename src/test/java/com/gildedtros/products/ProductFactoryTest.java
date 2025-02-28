@@ -1,10 +1,7 @@
 package com.gildedtros.products;
 
 import com.gildedtros.Item;
-import com.gildedtros.products.strategies.ConstantQualityUpdatingStrategy;
-import com.gildedtros.products.strategies.EventPeakQualityUpdatingStrategy;
-import com.gildedtros.products.strategies.RegularAppreciationQualityUpdatingStrategy;
-import com.gildedtros.products.strategies.RegularDevaluationQualityUpdatingStrategy;
+import com.gildedtros.products.strategies.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -32,7 +29,7 @@ class ProductFactoryTest {
     }
 
     @Test
-    void bDawgKeychainShouldHaveRegularAppreciationStrategy() {
+    void bDawgKeychainShouldHaveConstantStrategy() {
         Item item = new Item("B-DAWG Keychain", 10, 10);
 
         Product product = ProductFactory.createProduct(item);
@@ -42,11 +39,21 @@ class ProductFactoryTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"Backstage passes for Re:Factor", "Backstage passes for HAXX"})
-    void bDawgKeychainShouldHaveRegularAppreciationStrategy(String name) {
+    void passesShouldHaveEventPeakStrategy(String name) {
         Item item = new Item(name, 10, 10);
 
         Product product = ProductFactory.createProduct(item);
 
         assertThat(product.getQualityUpdatingStrategy()).isInstanceOf(EventPeakQualityUpdatingStrategy.class);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"Duplicate Code", "Long Methods", "Ugly Variable Names"})
+    void SmellyItemsShouldHaveDoubleRateDevaluationStrategy(String name) {
+        Item item = new Item(name, 10, 10);
+
+        Product product = ProductFactory.createProduct(item);
+
+        assertThat(product.getQualityUpdatingStrategy()).isInstanceOf(DoubleRateDevaluationQualityUpdatingStrategy.class);
     }
 }
