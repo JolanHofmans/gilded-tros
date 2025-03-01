@@ -8,17 +8,25 @@ public class Product {
     private int quality;
     private final QualityUpdatingStrategy qualityUpdatingStrategy;
 
-    public Product(String name, int sellIn, int quality, QualityUpdatingStrategy qualityUpdatingStrategy) {
-        if (quality < 0 || quality > 50) {
-            throw new IllegalArgumentException("Quality must be between 0 and 50");
-        }
-        if(qualityUpdatingStrategy == null) {
+    private Product(String name, int sellIn, int quality, QualityUpdatingStrategy qualityUpdatingStrategy) {
+        if (qualityUpdatingStrategy == null) {
             throw new IllegalArgumentException("QualityUpdatingStrategy must not be null");
         }
         this.name = name;
         this.sellIn = sellIn;
         this.quality = quality;
         this.qualityUpdatingStrategy = qualityUpdatingStrategy;
+    }
+
+    public static Product createProduct(String name, int sellIn, int quality, QualityUpdatingStrategy qualityUpdatingStrategy) {
+        if (quality < 0 || quality > 50) {
+            throw new IllegalArgumentException("Quality must be between 0 and 50");
+        }
+        return new Product(name, sellIn, quality, qualityUpdatingStrategy);
+    }
+
+    public static Product createProduct(String name, int sellIn, QualityUpdatingStrategy qualityUpdatingStrategy) {
+        return new Product(name, sellIn, 80, qualityUpdatingStrategy);
     }
 
     public String getName() {

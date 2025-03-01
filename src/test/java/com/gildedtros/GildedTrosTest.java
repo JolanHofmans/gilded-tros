@@ -58,11 +58,11 @@ class GildedTrosTest {
 
     @Test
     void bDawgShouldStayConstant() {
-        Item[] items = new Item[]{new Item(B_DAWG_KEYCHAIN, 1, 10)};
+        Item[] items = new Item[]{new Item(B_DAWG_KEYCHAIN, 1, 80)};
         GildedTros app = new GildedTros(items);
         app.updateQuality();
 
-        assertThat(app.items[0].quality).isEqualTo(10);
+        assertThat(app.items[0].quality).isEqualTo(80);
         assertThat(app.items[0].sellIn).isEqualTo(1);
     }
 

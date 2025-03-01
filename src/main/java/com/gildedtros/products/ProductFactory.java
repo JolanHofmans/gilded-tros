@@ -15,13 +15,12 @@ public class ProductFactory {
     }
 
     public static Product createProduct(Item item) {
-        QualityUpdatingStrategy strategy = switch (item.name) {
-            case "Good Wine" -> REGULAR_APPRECIATION;
-            case "B-DAWG Keychain" -> CONSTANT_QUALITY;
-            case "Backstage passes for Re:Factor", "Backstage passes for HAXX" -> EVENT_PEAK;
-            case "Duplicate Code", "Long Methods", "Ugly Variable Names" -> DOUBLE_RATE_DEVALUATION;
-            default -> REGULAR_DEVALUATION;
+        return switch (item.name) {
+            case "Good Wine" -> Product.createProduct(item.name, item.sellIn, item.quality, REGULAR_APPRECIATION);
+            case "B-DAWG Keychain" -> Product.createProduct(item.name, item.sellIn, CONSTANT_QUALITY);
+            case "Backstage passes for Re:Factor", "Backstage passes for HAXX" -> Product.createProduct(item.name, item.sellIn, item.quality, EVENT_PEAK);
+            case "Duplicate Code", "Long Methods", "Ugly Variable Names" -> Product.createProduct(item.name, item.sellIn, item.quality, DOUBLE_RATE_DEVALUATION);
+            default -> Product.createProduct(item.name, item.sellIn, item.quality, REGULAR_DEVALUATION);
         };
-        return new Product(item.name, item.sellIn, item.quality, strategy);
     }
 }
